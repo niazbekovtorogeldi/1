@@ -52,11 +52,12 @@ public class ChequeApi {
 
     }
 
+
     @GetMapping("/page/{id}")
     public ChequePaginationResponse getAllByPagination(@PathVariable Long id,
                                                        @RequestParam int page,
-                                                       @RequestParam int size){
-        return chequeService.getPagination(id,page,size);
+                                                       @RequestParam int size) {
+        return chequeService.getPagination(id, page, size);
 
     }
-}
+    }

@@ -20,8 +20,6 @@ public interface ChequeService {
     List<AllCheque> getFullInformationFromUser(Long id);
     Double getAllChecksSumsFromRestaurant(Long restaurantId);
 
-    ChequePaginationResponse getPagination(Long id, int page, int size);
+    ChequePaginationResponse getPagination(Long id,int page, int size);
 
-
-//    ChequePaginationResponse getPagination(Long id,int page, int size);
 }

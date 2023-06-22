@@ -22,10 +22,11 @@ public interface MenuItemRepository extends JpaRepository<MenuItem, Long> {
             " from MenuItem m where m.isVegetarian=:isVegetarian")
     List<MenuItemResponse> getMenuItemByFilterByVegetarian(@Param("isVegetarian") Boolean isVegetarian);
 
-    @Query("select new com.example.finalproject.dto.dtoMenultem.MenuItemResponse" +
-            "(m.id,m.name,m.image,m.price,m.description,m.isVegetarian)" +
-            " from MenuItem m order by case when:sortOrder='asc' then m.price end asc ," +
-            "case when:sortOrder='desc' then m.price end desc ")
+    @Query("SELECT new com.example.finalproject.dto.dtoMenultem.MenuItemResponse(" +
+            "        m.id, m.name, m.image, m.price, m.description, m.isVegetarian)" +
+            "         FROM MenuItem m" +
+            "         ORDER BY CASE WHEN :sortOrder = 'asc' THEN m.price END ASC," +
+            "         CASE WHEN :sortOrder = 'desc' THEN m.price END DESC")
     List<MenuItemResponse> getMenuItemByAscOrDesc(@Param("sortOrder") String sortOrder);
 
     @Query("select new com.example.finalproject.dto.dtoMenultem.MenuItemResponse" +

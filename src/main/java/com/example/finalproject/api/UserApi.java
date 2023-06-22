@@ -3,6 +3,7 @@ package com.example.finalproject.api;
 import com.example.finalproject.dto.SimpleResponse.SimpleResponse;
 import com.example.finalproject.dto.dtoUser.UserRequest;
 import com.example.finalproject.dto.dtoUser.UserResponse;
+
 import com.example.finalproject.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,9 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RequiredArgsConstructor
-@RequestMapping("/user")
 @RestController
+@RequestMapping("/user")
+@RequiredArgsConstructor
+
 public class UserApi {
     private final UserService userService;
 
@@ -20,8 +22,8 @@ public class UserApi {
     public List<UserResponse>userResponses(){
         return userService.getAllUsers();
     }
-    @PreAuthorize("hasAuthority('ADMIN')")
-    @PostMapping("/{restaurantId}")
+
+    @PostMapping("/save")
     public SimpleResponse saveUser(@RequestBody UserRequest userRequest){
         return userService.saveUser(userRequest);
 

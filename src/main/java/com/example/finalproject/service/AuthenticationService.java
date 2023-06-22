@@ -6,8 +6,6 @@ import com.example.finalproject.dto.authencationResponse.SignInRequest;
 import com.example.finalproject.dto.authencationResponse.SignUpRequest;
 
 public interface AuthenticationService {
-//    AuthenticationResponse adminToken(AdminTokenRequest adminTokenResponse);
-//
 
     AuthenticationResponse signUp(SignUpRequest signUpRequest);
 

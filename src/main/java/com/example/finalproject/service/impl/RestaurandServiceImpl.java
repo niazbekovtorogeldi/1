@@ -24,6 +24,7 @@ public class RestaurandServiceImpl implements RestaurantService {
         return restaurantRepository.getAllRestaurant();
     }
 
+
     @Override
     public SimpleResponse saveRestaurant(RestaurantRequest restaurantRequest) {
         Restaurant restaurant= new Restaurant();

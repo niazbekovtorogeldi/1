@@ -1,18 +1,17 @@
 package com.example.finalproject.service.impl;
 
 import com.example.finalproject.confic.JwtService;
-import com.example.finalproject.dto.authencationResponse.AdminTokenRequest;
 import com.example.finalproject.dto.authencationResponse.AuthenticationResponse;
 import com.example.finalproject.dto.authencationResponse.SignInRequest;
 import com.example.finalproject.dto.authencationResponse.SignUpRequest;
 import com.example.finalproject.enam.Role;
 
 import com.example.finalproject.entity.User;
+import com.example.finalproject.exception.NotFoundException;
 import com.example.finalproject.repository.UserRepository;
 import com.example.finalproject.service.AuthenticationService;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityExistsException;
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -32,18 +31,6 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
-//    @Override
-//    public AuthenticationResponse adminToken(AdminTokenRequest adminTokenRequest) {
-//        User user1 = userRepository.findById(1L).orElseThrow(() -> new UsernameNotFoundException("user with email: 1 is not found!"));
-//        String token = jwtService.generateToken(user1);
-//        System.out.println(token);
-//        return AuthenticationResponse.builder()
-//                .email(user1.getEmail())
-//                .token(token)
-//
-//                .role(user1.getRole())
-//                .build();
-//    }
 
 
     @Override
@@ -73,6 +60,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setAge(signUpRequest.age());
         user.setExpirense(signUpRequest.experience());
         user.setDateOfBirth(ZonedDateTime.now());
+        user.setPhoneNumber(signUpRequest.phoneNumber());
         user.setPassword(passwordEncoder.encode(signUpRequest.password()));
         user.setRole(signUpRequest.role());
         return user;
@@ -91,42 +79,43 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     public AuthenticationResponse signIn(SignInRequest signInRequest) {
 
         if (signInRequest.getEmail().isBlank()) {
+            log.error("Email doesn't exist!");
             throw new BadCredentialsException("Email doesn't exist!");
         }
-        User user = userRepository.getUserByEmail(signInRequest.getEmail())
-                .orElseThrow(() -> new EntityNotFoundException(
-                        "USer with email: " + signInRequest.getEmail() + " not found"
-                ));
+
+        User user = userRepository.getUserByEmail(signInRequest.getEmail()).orElseThrow(() -> {
+            log.error("User with email: " + signInRequest.getEmail() + " not found");
+            return new NotFoundException("User with email: " + signInRequest.getEmail() + " not found");
+        });
+
         if (!passwordEncoder.matches(signInRequest.getPassword(), user.getPassword())) {
+            log.error("Incorrect password!");
             throw new BadCredentialsException("Incorrect password!");
         }
+
+
         String jwtToken = jwtService.generateToken(user);
+
         return AuthenticationResponse
                 .builder()
                 .email(user.getEmail())
                 .role(user.getRole())
                 .token(jwtToken)
                 .build();
-
-
-
-
-
-
-
     }
+
 
     @PostConstruct
     public void initializeAdmin() {
         User admin = new User();
-        admin.setEmail("t@gmail.com");
+        admin.setEmail("torogeldi@gmail.com");
         admin.setDateOfBirth(ZonedDateTime.now());
-        admin.setPassword(passwordEncoder.encode("t111"));
+        admin.setPassword(passwordEncoder.encode("torogeldi123"));
         admin.setRole(Role.ADMIN);
         admin.setLastName("nizbekov");
         admin.setFirstName("torogeldi");
-
-        if (!userRepository.existsByEmail("t@gmail.com")) {
+        admin.setPhoneNumber("+996505104433");
+        if (!userRepository.existsByEmail("torogeldi@gmail.com")) {
             userRepository.save(admin);
         }
 

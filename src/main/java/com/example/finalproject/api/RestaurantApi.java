@@ -3,6 +3,7 @@ package com.example.finalproject.api;
 import com.example.finalproject.dto.SimpleResponse.SimpleResponse;
 import com.example.finalproject.dto.dtoRestaurant.RestaurantRequest;
 import com.example.finalproject.dto.dtoRestaurant.RestaurantResponse;
+import com.example.finalproject.entity.Restaurant;
 import com.example.finalproject.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -14,6 +15,7 @@ import java.util.List;
 @RequestMapping("/restaurants")
 public class RestaurantApi {
     private  final RestaurantService restaurantService;
+
 
     @GetMapping
     public List<RestaurantResponse>restaurantResponses(){

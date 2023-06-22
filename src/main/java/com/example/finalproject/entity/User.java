@@ -1,14 +1,12 @@
 package com.example.finalproject.entity;
 
+
 import com.example.finalproject.enam.Role;
 import com.example.finalproject.validation.EmailValid;
 import com.example.finalproject.validation.PasswordValid;
 import com.example.finalproject.validation.PhoneNumberValid;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
@@ -40,6 +38,7 @@ public class User implements UserDetails {
     private ZonedDateTime dateOfBirth;
     @NotNull(message = "Поле должно быть заполнено")
     @EmailValid
+    @Column(unique = true)
     private String email;
     @NotNull(message = "Поле должно быть заполнено")
     @PasswordValid
@@ -53,11 +52,15 @@ public class User implements UserDetails {
     private int age;
     private int expirense;
 
+
+
+
     @ManyToOne(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST})
     private Restaurant restaurant;
 
     @OneToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "user")
     private List<Cheque> cheques;
+
 
 
     @Override
